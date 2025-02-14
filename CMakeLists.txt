@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.20)
 project(unix-t)
 
 include_directories(/usr/include)
+include_directories(${CMAKE_SOURCE_DIR}/include)
+message(STATUS "include dir: ${CMAKE_SOURCE_DIR}/include")
 
 add_subdirectory(csapp)
 
@@ -54,7 +56,7 @@ add_executable(file_fcntl_lock file/fcntl_lock.c)
 target_link_libraries(file_fcntl_lock libapue.a)
 add_executable(file_fcntl_nonblock file/fcntl_nonblock.c)
 target_link_libraries(file_fcntl_nonblock libapue.a)
-add_executable(file_seek file/seek.c)
+add_executable(file_seek file/seek.c file/unix_file.c)
 target_link_libraries(file_seek libapue.a)
 add_executable(file_ioctl file/ioctl.c)
 target_link_libraries(file_ioctl libapue.a)
