@@ -55,76 +55,68 @@ void close_file(int fd) {
   }
 }
 
-int main() {
-
-  int fd = open_file("file.txt", O_CREAT | O_RDWR);
-  if (fd == -1) {
-    return EXIT_FAILURE;
-  }
-
-  // 写入内容
-  write_file(fd, "Hello, world!", 13);
-
-  off_t offset = lseek_file(fd, 0, SEEK_SET);
-  if (offset == -1) {
-    perror("lseek");
-    close_file(fd);
-    return EXIT_FAILURE;
-  }
-  printf("File offset set to %ld\n", offset);
-
-  // 现在可以从偏移量10开始读写文件
-
-  char buf[1024];
-  ssize_t n;
-  n = read_file(fd, buf, sizeof(buf));
+/* 写入文件内容*/
+void write_content(int fd, const char *content) {
+  ssize_t n = write_file(fd, content, strlen(content));
   if (n < 0) {
     close_file(fd);
-    return EXIT_FAILURE;
+    exit(EXIT_FAILURE);
   }
+}
 
+/* 读取文件内容*/
+void read_content(int fd) {
+  char buf[1024];
+  ssize_t n = read_file(fd, buf, sizeof(buf));
+  if (n < 0) {
+    close_file(fd);
+    exit(EXIT_FAILURE);
+  }
   printf("Read %zd bytes from file\n", n);
   buf[n] = '\0';
   printf("Read data: %s\n", buf);
+}
+
+/* 删除文件*/
+void delete_file(const char *filename) {
+  if (unlink(filename) == -1) {
+    perror("unlink");
+    exit(EXIT_FAILURE);
+  }
+}
+
+int main() {
+  int fd = open_file("file.txt", O_CREAT | O_RDWR);
+  if (fd == -1) {
+    exit(EXIT_FAILURE);
+  }
+
+  // 写入内容
+  write_content(fd, "Hello, world!");
 
   // 将文件指针移动到文件末尾，准备追加写入
-  offset = lseek_file(fd, 0, SEEK_END);
+  off_t offset = lseek_file(fd, 0, SEEK_END);
   if (offset == -1) {
     close_file(fd);
-    return EXIT_FAILURE;
+    exit(EXIT_FAILURE);
   }
 
   // 写文件
-  n = write_file(fd, " hi!", 4);
-  if (n < 0) {
-    close_file(fd);
-    return EXIT_FAILURE;
-  }
+  write_content(fd, " hi!");
 
   // 将文件指针移动到文件开头，准备再次读取
   offset = lseek_file(fd, 0, SEEK_SET);
   if (offset == -1) {
     close_file(fd);
-    return EXIT_FAILURE;
+    exit(EXIT_FAILURE);
   }
 
-  // 再读取文件，并输出
-  char buffer[1024];
-  n = read_file(fd, buffer, sizeof(buffer));
-  if (n < 0) {
-    close_file(fd);
-    return EXIT_FAILURE;
-  }
-  printf("Read %zd bytes from file\n", n);
-  buffer[n] = '\0';
-  printf("Read data: %s\n", buffer);
+  // 读取文件内容
+  read_content(fd);
 
   close_file(fd);
   // 删除文件
-  if (unlink("file.txt") == -1) {
-    perror("unlink");
-    return EXIT_FAILURE;
-  }
+  delete_file("file.txt");
 
   return EXIT_SUCCESS;
 }
