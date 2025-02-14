@@ -3,7 +3,12 @@
 
 /* open file*/
 int open_file(const char *filename, int flags) {
-  int fd = open(filename, flags, 0644);
+  return open_file2(filename, flags, 0644);
+}
+
+/* open file*/
+int open_file2(const char *filename, int flags, int mode) {
+  int fd = open(filename, flags, mode);
   if (fd == -1) {
     perror("open");
     return -1;
@@ -80,4 +85,23 @@ void delete_file(const char *filename) {
     perror("unlink");
     exit(EXIT_FAILURE);
   }
+}
+
+/*文件描述符复制 */
+int dup_file(int oldfd) {
+  int newfd = dup(oldfd);
+  if (newfd == -1) {
+    perror("dup");
+    return -1;
+  }
+  return newfd;
+}
+
+/*用于将一个文件描述符复制到另一个文件描述符*/
+int dup2_file(int oldfd, int newfd) {
+  if (dup2(oldfd, newfd) == -1) {
+    perror("dup2");
+    return -1;
+  }
+  return newfd;
 }

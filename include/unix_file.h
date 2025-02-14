@@ -1,11 +1,12 @@
 #ifndef __UNIX_FILE_H__
 #define __UNIX_FILE_H__
 
-/* open file*/
 #include "common.h"
 
+/* open file*/
 int open_file(const char *, int);
-
+/* open file*/
+int open_file2(const char *, int, int);
 /* lseek file*/
 off_t lseek_file(int, off_t, int);
 
@@ -26,4 +27,10 @@ void read_content(int fd);
 
 /* 删除文件*/
 void delete_file(const char *);
+
+/* 文件描述符复制 */
+int dup_file(int);
+
+/* 用于将一个文件描述符复制到另一个文件描述符 */
+int dup2_file(int, int);
 #endif
