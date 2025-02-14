@@ -2,7 +2,8 @@
 #define __UNIX_FILE_H__
 
 /* open file*/
-#include <unistd.h>
+#include "common.h"
+
 int open_file(const char *, int);
 
 /* lseek file*/

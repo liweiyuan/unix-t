@@ -1,9 +1,5 @@
 #include "unix_file.h"
-#include <apue.h>
 #include <errno.h>
-#include <fcntl.h>
-#include <stdio.h>
-#include <unistd.h>
 
 /* open file*/
 int open_file(const char *filename, int flags) {

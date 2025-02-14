@@ -1,6 +1,4 @@
 #include "unix_file.h"
-#include <apue.h>
-#include <fcntl.h>
 
 int main() {
   int fd = open_file("file.txt", O_CREAT | O_RDWR);
