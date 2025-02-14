@@ -38,7 +38,7 @@ add_executable(io_stream io/memopen.c)
 target_link_libraries(io_stream libapue.a)
 
 ### file
-add_executable(file_copy file/copy.c)
+add_executable(file_copy file/copy.c file/unix_file.c)
 target_link_libraries(file_copy libapue.a)
 add_executable(file_dup file/dup.c)
 target_link_libraries(file_dup libapue.a)
