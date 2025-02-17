@@ -68,3 +68,5 @@ target_link_libraries(gethostent libapue.a)
 #### ipc
 add_executable(ipc_pipe ipc/pipe.c)
 target_link_libraries(ipc_pipe libapue.a)
+
+add_subdirectory(dir)
