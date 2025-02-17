@@ -1,10 +1,9 @@
-#include <apue.h>
+#include "unix_file.h"
 #include <errno.h>
 #include <fcntl.h>
-#include <unistd.h>
 
 int main() {
-  int fd = open("file.txt", O_RDWR | O_CREAT | O_APPEND, 0644);
+  int fd = open_file2("file.txt", O_RDWR | O_CREAT | O_APPEND, 0644);
   if (fd < 0) {
     err_sys("open error");
     return 1;
@@ -24,7 +23,7 @@ int main() {
 
   char buf[1024];
   ssize_t n;
-  n = read(fd, buf, sizeof(buf));
+  n = read_file(fd, buf, sizeof(buf));
   if (n < 0) {
     if (errno == EAGAIN || errno == EWOULDBLOCK) {
       printf("No data available for non-blocking read\n");
@@ -33,8 +32,8 @@ int main() {
       return 1;
     }
   } else {
-    write(STDOUT_FILENO, buf, n);
+    write_file(STDOUT_FILENO, buf, n);
   }
-  close(fd);
+  close_file(fd);
   return 0;
 }

@@ -1,11 +1,9 @@
-#include <apue.h>
+#include "unix_file.h"
 #include <errno.h>
 #include <fcntl.h>
-#include <stdio.h>
-#include <string.h>
 
 int main() {
-  int fd = open("file.txt", O_RDWR | O_CREAT | O_APPEND, 0644);
+  int fd = open_file2("file.txt", O_RDWR | O_CREAT | O_APPEND, 0644);
   if (fd < 0) {
     err_sys("open error");
     return 1;
@@ -26,7 +24,7 @@ int main() {
   printf("Write lock acquired\n");
 
   // 进行写操作...
-  write(fd, "Hello, World!\n", 14);
+  write_file(fd, "Hello, World!\n", 14);
   lock.l_type = F_UNLCK; // 释放锁
 
   if (fcntl(fd, F_SETLK, &lock) < 0) {
@@ -34,6 +32,6 @@ int main() {
     return 1;
   }
   printf("Write lock released\n");
-  close(fd);
+  close_file(fd);
   return 0;
 }

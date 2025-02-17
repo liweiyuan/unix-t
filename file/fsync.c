@@ -1,18 +1,14 @@
-#include <apue.h>
-#include <fcntl.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
+#include "unix_file.h"
 
 int main() {
-  int fd = open("file.txt", O_CREAT | O_WRONLY | O_TRUNC, 0644);
+  int fd = open_file2("file.txt", O_CREAT | O_WRONLY | O_TRUNC, 0644);
   if (fd < 0) {
     err_sys("open error");
     exit(1);
   }
 
   const char *str = "This is some data to be written to the file.";
-  if (write(fd, str, strlen(str)) < 0) {
+  if (write_file(fd, str, strlen(str)) < 0) {
     err_sys("write error");
     exit(1);
   }
@@ -29,6 +25,6 @@ int main() {
     exit(1);
   }
 
-  close(fd);
+  close_file(fd);
   return 0;
 }

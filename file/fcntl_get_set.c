@@ -1,10 +1,7 @@
-#include <apue.h>
-#include <fcntl.h>
-#include <stdio.h>
-#include <unistd.h>
+#include "unix_file.h"
 
 int main() {
-  int fd = open("file.txt", O_RDWR | O_CREAT, 0644);
+  int fd = open_file2("file.txt", O_RDWR | O_CREAT, 0644);
   if (fd < 0) {
     err_sys("open error");
     return 1;
@@ -14,6 +11,7 @@ int main() {
   int flags = fcntl(fd, F_GETFL, 0);
   if (flags < 0) {
     err_sys("fcntl error");
+    close_file(fd);
     return 1;
   }
   printf("Current file status flags: %d\n", flags);
@@ -22,9 +20,10 @@ int main() {
   int ret = fcntl(fd, F_SETFL, flags | O_APPEND);
   if (ret < 0) {
     err_sys("fcntl error");
+    close_file(fd);
     return 1;
   }
-  write(fd, "hello, ", 7);
-  close(fd);
+  write_file(fd, "hello, ", 7);
+  close_file(fd);
   return 0;
 }
