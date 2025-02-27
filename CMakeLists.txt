@@ -1,9 +1,22 @@
 cmake_minimum_required(VERSION 3.20)
 project(unix-t)
 
+
+# 查找 PThread 库
+find_package(Threads REQUIRED)  # REQUIRED 关键字表示如果找不到 PThread，则 CMake 会报错
+
+# 检查 PThread 是否被找到
+if(Threads_FOUND)
+    message(STATUS "Found PThread library: ${Threads_LIBRARIES}")
+else()
+    message(FATAL_ERROR "PThread library not found!") # 如果没有使用 REQUIRED，则改为显式报错
+endif()
+
 include_directories(/usr/include)
 include_directories(${CMAKE_SOURCE_DIR}/include)
 message(STATUS "include dir: ${CMAKE_SOURCE_DIR}/include")
+
+
 
 add_subdirectory(csapp)
 
@@ -68,5 +81,12 @@ target_link_libraries(gethostent libapue.a)
 #### ipc
 add_executable(ipc_pipe ipc/pipe.c)
 target_link_libraries(ipc_pipe libapue.a)
+
+add_executable(ipc_process_a ipc/process_a.c)
+target_link_libraries(ipc_process_a PRIVATE pthread)
+
+
+add_executable(ipc_process_b ipc/process_b.c)
+target_link_libraries(ipc_process_b PRIVATE pthread)
 
 add_subdirectory(dir)
